@@ -1,5 +1,13 @@
 // PubNub MQTT example using ESP32.
 #include <WiFi.h>
+#define analogPin 34
+
+// Assign output variables to GPIO pins
+const int output5 = 5;
+const int output4 = 4;
+// Auxiliar variables to store the current output state
+String output5State = "off";
+String output4State = "off";
 
 // WiFi Connection info.
 const char* ssid = "Skynet_2.0";
@@ -10,18 +18,28 @@ WiFiServer server(80);
 
 // Variable to store the HTTP request
 String header;
+int temp_val;
+long lastMsg = 0;
 
 // Current time
 unsigned long currentTime = millis();
+
 // Previous time
 unsigned long previousTime = 0; 
+
 // Define timeout time in milliseconds (example: 2000ms = 2s)
 const long timeoutTime = 2000;
 
 void setup() {
   Serial.begin(115200);
   // Initialize the output variables as outputs
-  pinMode(34, INPUT);
+  pinMode(analogPin, INPUT);
+   // Initialize the output variables as outputs
+  pinMode(output5, OUTPUT);
+  pinMode(output4, OUTPUT);
+  // Set outputs to LOW
+  digitalWrite(output5, LOW);
+  digitalWrite(output4, LOW);
 
   // Connect to Wi-Fi network with SSID and password
   Serial.print("Connecting to ");
@@ -69,20 +87,20 @@ void loop(){
             // turns the GPIOs on and off
             if (header.indexOf("GET /26/on") >= 0) {
               Serial.println("GPIO 26 on");
-              output26State = "on";
-              digitalWrite(output26, HIGH);
+              output4State = "on";
+              digitalWrite(output4, HIGH);
             } else if (header.indexOf("GET /26/off") >= 0) {
               Serial.println("GPIO 26 off");
-              output26State = "off";
-              digitalWrite(output26, LOW);
+              output4State = "off";
+              digitalWrite(output4, LOW);
             } else if (header.indexOf("GET /27/on") >= 0) {
               Serial.println("GPIO 27 on");
-              output27State = "on";
-              digitalWrite(output27, HIGH);
+              output5State = "on";
+              digitalWrite(output5, HIGH);
             } else if (header.indexOf("GET /27/off") >= 0) {
               Serial.println("GPIO 27 off");
-              output27State = "off";
-              digitalWrite(output27, LOW);
+              output5State = "off";
+              digitalWrite(output5, LOW);
             }
             
             // Display the HTML web page
@@ -100,18 +118,18 @@ void loop(){
             client.println("<body><h1>ESP32 Web Server</h1>");
             
             // Display current state, and ON/OFF buttons for GPIO 26  
-            client.println("<p>GPIO 26 - State " + output26State + "</p>");
-            // If the output26State is off, it displays the ON button       
-            if (output26State=="off") {
+            client.println("<p>GPIO 26 - State " + output4State + "</p>");
+            // If the output4State is off, it displays the ON button       
+            if (output4State=="off") {
               client.println("<p><a href=\"/26/on\"><button class=\"button\">ON</button></a></p>");
             } else {
               client.println("<p><a href=\"/26/off\"><button class=\"button button2\">OFF</button></a></p>");
             } 
                
             // Display current state, and ON/OFF buttons for GPIO 27  
-            client.println("<p>GPIO 27 - State " + output27State + "</p>");
-            // If the output27State is off, it displays the ON button       
-            if (output27State=="off") {
+            client.println("<p>GPIO 27 - State " + output5State + "</p>");
+            // If the output5State is off, it displays the ON button       
+            if (output5State=="off") {
               client.println("<p><a href=\"/27/on\"><button class=\"button\">ON</button></a></p>");
             } else {
               client.println("<p><a href=\"/27/off\"><button class=\"button button2\">OFF</button></a></p>");
@@ -139,9 +157,10 @@ void loop(){
   }
   
   long now = millis();
-  if(now - lastMsg > 10000) 
+  if(now - lastMsg > 1000) 
   {
      lastMsg = now;
-     
+     temp_val = analogRead(analogPin);  // read the input pin
+     Serial.println(temp_val);          // debug value
   }
 }
