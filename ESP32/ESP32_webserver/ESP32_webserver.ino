@@ -12,13 +12,15 @@ String output4State = "off";
 // WiFi Connection info.
 const char* ssid = "Skynet_2.0";
 const char* password =  "5anT1BrDi";
+const float temps[47]={-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40};
+const float volts[47]={3.17, 3.07, 2.96, 2.87, 2.77, 2.69, 2.60, 2.52, 2.45, 2.37, 2.31, 2.24, 2.18, 2.12, 2.06, 2.01, 1.96, 1.91, 1.86, 1.82, 1.78, 1.74, 1.70, 1.66, 1.62, 1.59, 1.56, 1.53, 1.50, 1.47, 1.44, 1.42, 1.39, 1.37, 1.34, 1.32, 1.30, 1.28, 1.26, 1.24, 1.23, 1.21, 1.19, 1.18, 1.16, 1.15};
 
 // Set web server port number to 80
 WiFiServer server(80);
 
 // Variable to store the HTTP request
 String header;
-int temp_val;
+float temp_val;
 long lastMsg = 0;
 
 // Current time
@@ -160,7 +162,15 @@ void loop(){
   if(now - lastMsg > 1000) 
   {
      lastMsg = now;
-     temp_val = analogRead(analogPin);  // read the input pin
-     Serial.println(temp_val);          // debug value
+     temp_val = analogRead(analogPin)*3.78/4095;  // read the input pin
+
+     for (int i=0; i<47; i++)
+     {
+        if (temp_val>volts[i])
+        {
+          Serial.println(temps[i]);
+          break;
+        } 
+     }
   }
 }
