@@ -1,19 +1,21 @@
 // PubNub MQTT example using ESP32.
 #include <WiFi.h>
 #define analogPin 34
+#define LED 2
+
 
 // Assign output variables to GPIO pins
 const int output5 = 5;
 const int output4 = 4;
 // Auxiliar variables to store the current output state
 String output5State = "off";
-String output4State = "off";
+String output2State = "off";
 
 // WiFi Connection info.
 const char* ssid = "Skynet_2.0";
 const char* password =  "5anT1BrDi";
-const float temps[47]={-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40};
-const float volts[47]={3.17, 3.07, 2.96, 2.87, 2.77, 2.69, 2.60, 2.52, 2.45, 2.37, 2.31, 2.24, 2.18, 2.12, 2.06, 2.01, 1.96, 1.91, 1.86, 1.82, 1.78, 1.74, 1.70, 1.66, 1.62, 1.59, 1.56, 1.53, 1.50, 1.47, 1.44, 1.42, 1.39, 1.37, 1.34, 1.32, 1.30, 1.28, 1.26, 1.24, 1.23, 1.21, 1.19, 1.18, 1.16, 1.15};
+const float temps[46]={-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40};
+const float volts[46]={3.17, 3.07, 2.96, 2.87, 2.77, 2.69, 2.60, 2.52, 2.45, 2.37, 2.31, 2.24, 2.18, 2.12, 2.06, 2.01, 1.96, 1.91, 1.86, 1.82, 1.78, 1.74, 1.70, 1.66, 1.62, 1.59, 1.56, 1.53, 1.50, 1.47, 1.44, 1.42, 1.39, 1.37, 1.34, 1.32, 1.30, 1.28, 1.26, 1.24, 1.23, 1.21, 1.19, 1.18, 1.16, 1.15};
 
 // Set web server port number to 80
 WiFiServer server(80);
@@ -38,11 +40,13 @@ void setup() {
   pinMode(analogPin, INPUT);
    // Initialize the output variables as outputs
   pinMode(output5, OUTPUT);
-  pinMode(output4, OUTPUT);
+  pinMode(LED, OUTPUT);
   // Set outputs to LOW
   digitalWrite(output5, LOW);
-  digitalWrite(output4, LOW);
-
+  digitalWrite(LED, HIGH);
+  delay(1000);
+  digitalWrite(LED, LOW);
+  
   // Connect to Wi-Fi network with SSID and password
   Serial.print("Connecting to ");
   Serial.println(ssid);
@@ -87,16 +91,16 @@ void loop(){
             client.println();
             
             // turns the GPIOs on and off
-            if (header.indexOf("GET /26/on") >= 0) {
-              Serial.println("GPIO 26 on");
-              output4State = "on";
-              digitalWrite(output4, HIGH);
-            } else if (header.indexOf("GET /26/off") >= 0) {
-              Serial.println("GPIO 26 off");
-              output4State = "off";
-              digitalWrite(output4, LOW);
+            if (header.indexOf("GET /2/on") >= 0) {
+              Serial.println("GPIO 2 on");
+              output2State = "on";
+              digitalWrite(LED, HIGH);
+            } else if (header.indexOf("GET /2/off") >= 0) {
+              Serial.println("GPIO 2 off");
+              output2State = "off";
+              digitalWrite(LED, LOW);
             } else if (header.indexOf("GET /27/on") >= 0) {
-              Serial.println("GPIO 27 on");
+              Serial.println("GPIO 2 on");
               output5State = "on";
               digitalWrite(output5, HIGH);
             } else if (header.indexOf("GET /27/off") >= 0) {
@@ -119,13 +123,13 @@ void loop(){
             // Web Page Heading
             client.println("<body><h1>ESP32 Web Server</h1>");
             
-            // Display current state, and ON/OFF buttons for GPIO 26  
-            client.println("<p>GPIO 26 - State " + output4State + "</p>");
+            // Display current state, and ON/OFF buttons for GPIO 2  
+            client.println("<p>GPIO 2 - State " + output2State + "</p>");
             // If the output4State is off, it displays the ON button       
-            if (output4State=="off") {
-              client.println("<p><a href=\"/26/on\"><button class=\"button\">ON</button></a></p>");
+            if (output2State=="off") {
+              client.println("<p><a href=\"/2/on\"><button class=\"button\">ON</button></a></p>");
             } else {
-              client.println("<p><a href=\"/26/off\"><button class=\"button button2\">OFF</button></a></p>");
+              client.println("<p><a href=\"/2/off\"><button class=\"button button2\">OFF</button></a></p>");
             } 
                
             // Display current state, and ON/OFF buttons for GPIO 27  
@@ -162,7 +166,7 @@ void loop(){
   if(now - lastMsg > 1000) 
   {
      lastMsg = now;
-     temp_val = analogRead(analogPin)*3.78/4095;  // read the input pin
+     temp_val = analogRead(analogPin)*3.83/4095;  // read the input pin
 
      for (int i=0; i<47; i++)
      {
