@@ -29,7 +29,7 @@ char webpage[] PROGMEM = R"=====(
 <html>
 <!-- Adding a data chart using Chart.js -->
 <head>
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js'></script>
 </head>
 <body onload="javascript:init()" style="
   width: 800px;
@@ -47,44 +47,47 @@ char webpage[] PROGMEM = R"=====(
 <!-- Adding a websocket to the client (webpage) -->
 <script>
   var webSocket, dataPlot;
-  var maxDataPoints = 20;
-  function removeData(){
-    dataPlot.data.labels.shift();
-    dataPlot.data.datasets[0].data.shift();
-  }
-  function addData(label, data) {
-    if(dataPlot.data.labels.length > maxDataPoints) removeData();
-    dataPlot.data.labels.push(label);
-    dataPlot.data.datasets[0].data.push(data);
-    dataPlot.update();
-  }
-  function init() {
-    webSocket = new WebSocket('ws://' + window.location.hostname + ':81/');
-    dataPlot = new Chart(document.getElementById("line-chart"), {
-      type: 'line',
-      data: {
-        labels: [],
-        datasets: [{
-          data: [-10, -5, 0, 5, 10, 15, 20 ,25, 30, 35, 40, 45],
-          label: "Temperature (C)",
-          borderColor: "#3e95cd",
-          fill: false
-        }]
-      }
-    });
-    webSocket.onmessage = function(event) {
-      var data = JSON.parse(event.data);
-      var today = new Date();
-      var t = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-      addData(t, data.value);
+    var maxDataPoints = 20;
+    function removeData(){
+      dataPlot.data.labels.shift();
+      dataPlot.data.datasets[0].data.shift();
     }
-  }
-  function sendDataRate(){
-    var dataRate = document.getElementById("dataRateSlider").value;
-    webSocket.send(dataRate);
-    dataRate = 1.0/dataRate;
-    document.getElementById("dataRateLabel").innerHTML = "Rate: " + dataRate.toFixed(2) + "Hz";
-  }
+    function addData(label, data) {
+      if(dataPlot.data.labels.length > maxDataPoints) removeData();
+      dataPlot.data.labels.push(label);
+      dataPlot.data.datasets[0].data.push(data);
+      dataPlot.update();
+    }
+    function init() {
+      webSocket = new WebSocket('ws://' + window.location.hostname + ':81/');
+      dataPlot = new Chart(document.getElementById("line-chart"), {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [{
+            data: [],
+            label: "Temperature (C)",
+            borderColor: "#3e95cd",
+            fill: false
+          }]
+        },
+        options: {
+          legend: {display: false},
+        }
+      });
+      webSocket.onmessage = function(event) {
+        var data = JSON.parse(event.data);
+        var today = new Date();
+        var t = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        addData(t, data.value);
+      }
+    }
+    function sendDataRate(){
+      var dataRate = document.getElementById("dataRateSlider").value;
+      webSocket.send(dataRate);
+      dataRate = 1.0/dataRate;
+      document.getElementById("dataRateLabel").innerHTML = "Rate: " + dataRate.toFixed(2) + "Hz";
+    }
 </script>
 </body>
 </html>
