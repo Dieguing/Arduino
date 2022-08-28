@@ -1,6 +1,7 @@
 // PubNub MQTT example using ESP32.
 #include <WiFi.h>
 #include <PubSubClient.h>
+#define adj 1
 
 // WiFi Connection info.
 char* ssid = "Skynet_2.0";
@@ -24,7 +25,7 @@ PubSubClient client(espClient);
 char grad_c[]="   ";
 char grad_f[]="   "; 
 
-uint16_t  C_grad, F_grad;
+uint16_t  C_grad, F_grad, avg[30],flag_send=0;
 float temp_val;
 
 long lastMsg = 0;
@@ -50,10 +51,16 @@ void setup() {
 void loop() 
 {
   long now = millis();
-  if (now - lastMsg > 10000) 
+  if (now - lastMsg > 100) 
   {
      lastMsg = now;
-    
+     int avg_t=0;
+     
+     for (int i=0; i<29; i++)
+     {
+      avg[i] = avg[i+1];
+     }
+     
      temp_val = analogRead(34) * 3.83/4095; // Read analog voltage and convert it to Kelvin [ADC_val * (3.31V/4096) / 10e-3V/K]
      
      for (int i=0; i<47; i++)
@@ -61,11 +68,24 @@ void loop()
         if (temp_val>volts[i])
         {
           Serial.println(temps[i]);
-          C_grad = temps[i];
+          avg[29] = temps[i];
           break;
         } 
      }
-     F_grad = C_grad * 9 / 5 + 32;
+
+     for (int i=0; i<30; i++)
+     {
+      avg_t += avg[i];
+     }
+     
+     C_grad = (avg_t / 30) - adj;
+     
+     flag_send++; 
+  }
+
+  if (flag_send==30)
+  {
+    F_grad = C_grad * 9 / 5 + 32;
 
      if(C_grad < 0)
      {
@@ -84,5 +104,7 @@ void loop()
      client.publish(topicA, grad_c);
      client.publish(topicB, grad_f);
      client.disconnect();
-  }
+     //digitalWrite(LED, !digitalRead(LED));
+     flag_send=0;
+  } 
 }
