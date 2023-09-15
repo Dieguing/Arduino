@@ -2,6 +2,7 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 #define adj 1
+#define avg_lenght 50
 
 // WiFi Connection info.
 const char* ssid = "Skynet_2.0";
@@ -25,7 +26,7 @@ PubSubClient client(espClient);
 char grad_c[]="   ";
 char grad_f[]="   "; 
 
-uint16_t  C_grad, F_grad, avg[30],flag_send=0;
+uint16_t  C_grad, F_grad, avg[avg_lenght],flag_send=0;
 float temp_val;
 
 long lastMsg = 0;
@@ -51,12 +52,12 @@ void setup() {
 void loop() 
 {
   long now = millis();
-  if (now - lastMsg > 100) 
+  if (now - lastMsg > 500) 
   {
      lastMsg = now;
      int avg_t=0;
      
-     for (int i=0; i<29; i++)
+     for (int i=0; i<avg_lenght-1; i++)
      {
       avg[i] = avg[i+1];
      }
@@ -68,22 +69,22 @@ void loop()
         if (temp_val>volts[i])
         {
           Serial.println(temps[i]);
-          avg[29] = temps[i];
+          avg[avg_lenght-1] = temps[i];
           break;
         } 
      }
 
-     for (int i=0; i<30; i++)
+     for (int i=0; i<avg_lenght; i++)
      {
       avg_t += avg[i];
      }
      
-     C_grad = (avg_t / 30) - adj;
+     C_grad = (avg_t / avg_lenght) - adj;
      
      flag_send++; 
   }
 
-  if (flag_send==30)
+  if (flag_send==6)
   {
     F_grad = C_grad * 9 / 5 + 32;
 
