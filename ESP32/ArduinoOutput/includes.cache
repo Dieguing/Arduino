@@ -1,0 +1,77 @@
+[
+  {
+    "Sourcefile": null,
+    "Include": "",
+    "Includepath": "/home/dieguing/.arduino15/packages/esp32/hardware/esp32/2.0.9/cores/esp32"
+  },
+  {
+    "Sourcefile": null,
+    "Include": "",
+    "Includepath": "/home/dieguing/.arduino15/packages/esp32/hardware/esp32/2.0.9/variants/esp32"
+  },
+  {
+    "Sourcefile": "/home/dieguing/Projects/Arduino/ESP32/ArduinoOutput/sketch/esp32_mqtt_ntc.ino.cpp",
+    "Include": "WiFi.h",
+    "Includepath": "/home/dieguing/.arduino15/packages/esp32/hardware/esp32/2.0.9/libraries/WiFi/src"
+  },
+  {
+    "Sourcefile": "/home/dieguing/Projects/Arduino/ESP32/ArduinoOutput/sketch/esp32_mqtt_ntc.ino.cpp",
+    "Include": "PubSubClient.h",
+    "Includepath": "/home/dieguing/Arduino/libraries/PubSubClient/src"
+  },
+  {
+    "Sourcefile": "/home/dieguing/Projects/Arduino/ESP32/ArduinoOutput/sketch/esp32_mqtt_ntc.ino.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "/home/dieguing/.arduino15/packages/esp32/hardware/esp32/2.0.9/libraries/WiFi/src/WiFi.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "/home/dieguing/.arduino15/packages/esp32/hardware/esp32/2.0.9/libraries/WiFi/src/WiFiAP.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "/home/dieguing/.arduino15/packages/esp32/hardware/esp32/2.0.9/libraries/WiFi/src/WiFiClient.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "/home/dieguing/.arduino15/packages/esp32/hardware/esp32/2.0.9/libraries/WiFi/src/WiFiGeneric.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "/home/dieguing/.arduino15/packages/esp32/hardware/esp32/2.0.9/libraries/WiFi/src/WiFiMulti.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "/home/dieguing/.arduino15/packages/esp32/hardware/esp32/2.0.9/libraries/WiFi/src/WiFiSTA.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "/home/dieguing/.arduino15/packages/esp32/hardware/esp32/2.0.9/libraries/WiFi/src/WiFiScan.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "/home/dieguing/.arduino15/packages/esp32/hardware/esp32/2.0.9/libraries/WiFi/src/WiFiServer.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "/home/dieguing/.arduino15/packages/esp32/hardware/esp32/2.0.9/libraries/WiFi/src/WiFiUdp.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "/home/dieguing/Arduino/libraries/PubSubClient/src/PubSubClient.cpp",
+    "Include": "",
+    "Includepath": null
+  }
+]

@@ -1,0 +1,9 @@
+#line 1 "/home/dieguing/Projects/Arduino/ESP32/esp32_mqtt_ntc/.vscode/arduino.json"
+{
+    "configuration": "PSRAM=disabled,PartitionScheme=default,CPUFreq=240,FlashMode=qio,FlashFreq=80,FlashSize=4M,UploadSpeed=921600,LoopCore=1,EventsCore=1,DebugLevel=none",
+    "board": "esp32:esp32:esp32",
+    "programmer": "avrisp",
+    "sketch": "esp32_mqtt_ntc.ino",
+    "port": "/dev/ttyUSB0",
+    "output": "../ArduinoOutput"
+}

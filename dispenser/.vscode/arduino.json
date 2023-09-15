@@ -1,0 +1,7 @@
+{
+    "configuration": "cpu=atmega328",
+    "board": "arduino:avr:nano",
+    "programmer": "avrisp",
+    "sketch": "dispenser.ino",
+    "port": "/dev/ttyS0"
+}
